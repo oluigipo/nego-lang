@@ -1,0 +1,15 @@
+if (expr) {} else {} // Condicional if convencional.
+
+input() // Pegar input do usuário. Retorna uma String.
+print(valor) // Printa alguma coisa no console.
+num(string) // Converte uma String para um número.
+str(numero) // Converte um número para uma string.
+len(array) // Retorna o tamanho de uma array. Retorna um número. (OBS: Ainda não tem array ._.)
+
+true // Número 1
+false // Número 0
+
+func nome(argumentos) {} // Define uma função.
+return expr; // Retorna algum valor.
+
+// Extensão do arquivo: .ng
