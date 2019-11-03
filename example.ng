@@ -1,0 +1,66 @@
+//////////////////////////////////
+/// Exemple 1: Fibonacci Recursive
+func fib(a,b,c) {
+	a = a + b;
+	b = a - b;
+	c = c - 1;
+	
+	print(b);
+	
+	if (c > 0) {
+		fib(a,b,c);
+	}
+}
+
+inp = input();
+qnt = num(inp);
+fib(1,0,qnt);
+
+///////////////////////////
+/// Exemple 1: End of scope
+func function(a) {
+	print(a);
+}
+
+function(10);
+print(a); // Error.
+
+//////////////////////
+/// Exemple 1: If Else
+name = input();
+if (name == "tuas nega") {
+	print("Olá, criador!");
+} else if (name == "Succ3s") {
+	print("Vai fazer a sub porar");
+} else {
+	print("Olá, " + name);
+}
+
+////////////////////
+/// Exemple 1: While
+x = 10;
+while (x > 0) {
+	print(x * x);
+	x = x - 1;
+}
+
+///////////////////
+/// Exemple 1: Loop
+
+qnt = num(input());
+print("A quantidade escolhida é " + str(qnt));
+loop (i : qnt) {
+	print(i);
+}
+
+////////////////////////
+/// Exemple 1: Fibonacci
+qnt = num(input());
+
+a = 1;
+b = 0;
+loop (i : qnt) {
+	a = a + b;
+	b = a - b;
+	print(b);
+}

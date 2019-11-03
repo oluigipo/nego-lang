@@ -1,0 +1,180 @@
+// Statements
+{ stmts }
+"if" "(" expr ")" stmt
+"if" "(" expr ")" stmt "else" stmt
+"loop" "(" item ":" array ")" stmt
+"loop" "(" var ":" number ")" stmt
+"loop" stmt
+"break"
+"continue"
+
+// Parse Tree
+IDNT:
+    type: {0: NUMLITERAL, 1: STRINGLITERAL, 2: IDENTIFIER}
+    name: STRING
+BLOCK: STMT[]
+EXPR:
+    isExpr: BOOLEAN
+    left: EXPR | LITERAL
+    operation: OPERATOR
+    right: EXPR | LITERAL
+LITERAL:
+    type: {0: NUMLITERAL, 1: STRINGLITERAL, 2: IDENTIFIER}
+    value: VALUE
+STMT:
+    isExpr: BOOLEAN
+    operation: STATMENT
+
+IF extends STMT:
+    block1: BLOCK
+    block2: BLOCK
+    condition: EXPR
+
+WHILE extends STMT:
+    block: BLOCK
+    condition: EXPR
+
+RETURN extends STMT:
+    value: EXPR | LITERAL
+
+LOOP extends STMT:
+    block: BLOCK
+    it: IDNT
+    value: EXPR
+
+FUNC:
+    block: BLOCK
+    name: STRING
+    args: IDNT[]
+
+RETURN extends STMT:
+    value: IDNT
+
+
+
+
+
+
+
+
+// FUNÇÕES QUE NÃO FUNCIONAM
+
+/**
+ * @returns {string[]}
+ * @param {string[]} tokens
+ */
+function preParseExpr(tokens) {
+    let t = [..."(((", ...tokens, ...")))"];
+
+    t = t.map(token => {
+        switch (token) {
+            case '+': return "))+((".split('');
+            case '-': return "))-((".split('');
+            case '*': return ")*(".split('');
+            case '/': return ")/(".split('');
+            case '=': return ")))=(((".split('');
+            case '==': return [...")))", "==", ..."((("];
+            default: return token;
+        }
+    }).flat(Infinity);
+
+    return t;
+}
+
+function parseExpr(tokens) {
+    console.log(tokens);
+    let expr = {
+        isExpr: true,
+        operation: null,
+        left: null,
+        right: null
+    };
+
+    const identORlit = function () {
+        let op = testRule(tokens[0]);
+
+        switch (op) {
+            case TYPE.NUMLIT:
+                return { type: TYPE.NUMLIT, value: tokens[0] };
+            case TYPE.STRLIT:
+                return { type: TYPE.STRLIT, value: tokens[0].slice(1, tokens[0].length - 1) };
+            case TYPE.IDENT:
+                return { type: TYPE.IDENT, value: tokens[0] };
+            case -1:
+                throw "Syntax Error. (9)";
+        }
+    }
+
+    if (tokens.length === 0) throw "Syntax Error. (8)";
+
+    if (tokens.length === 1) return identORlit();
+
+
+    if (tokens[0] === '(') {
+        let j;
+        function cnt(pp) {
+            j = pp.indexOf('(');
+            if (j === -1) return -1;
+            let count = 0;
+            while (pp[++j] !== ')' || count > 0) {
+                if (pp[j] === '(') count++;
+                else if (pp[j] === ')') count--;
+                else if (j > pp.length) throw ("Syntax Error. (6)");
+            }
+        }
+
+        cnt(tokens);
+        while (j === tokens.length - 1 && tokens[j] === ')') {
+            tokens = tokens.slice(1, tokens.length - 1);
+            cnt(tokens);
+        }
+
+        if (tokens.length === 1) return identORlit();
+
+        if (tokens[0] === '(') {
+            expr.left = parseExpr(tokens.slice(1, j));
+            tokens = tokens.slice(j + 1, tokens.length);
+
+            expr.operation = tokens[0];
+
+            expr.right = parseExpr(tokens.slice(1, tokens.length));
+        } else {
+            expr.left = parseExpr(tokens[0]);
+            expr.operation = tokens[1];
+            expr.right = parseExpr(tokens.slice(2, tokens.length));
+        }
+
+        return expr;
+    }
+
+    if (tokens[1] === '(') {
+        expr.left = tokens[0];
+
+        let args = [];
+
+        let j = 1;
+        let count = 0;
+        while (tokens[++j] !== ')' || count > 0) {
+            if (tokens[j] === '(') count++;
+            else if (tokens[j] === ')') count--;
+            else if (j > tokens.length) throw ("Syntax Error. (7)");
+        }
+
+        let argsraw = tokens.slice(1, j);
+        let open = 0;
+        let last = 0;
+        for (let i = 0; i < args.length; i++) {
+            if (argsraw[i] === '(') open++;
+            if (argsraw[i] === ')') open--;
+            if (argsraw[i] === ',' && open === 0) {
+                args.push(parseExpr(argsraw.slice(last, i)));
+                last = i + 1;
+            }
+        }
+
+        expr.right = args;
+        expr.operation = "call";
+
+        return expr;
+    }
+}
