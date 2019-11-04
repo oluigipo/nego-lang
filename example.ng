@@ -17,7 +17,7 @@ qnt = num(inp);
 fib(1,0,qnt);
 
 ///////////////////////////
-/// Exemple 1: End of scope
+/// Exemple 2: End of scope
 func function(a) {
 	print(a);
 }
@@ -26,7 +26,7 @@ function(10);
 print(a); // Error.
 
 //////////////////////
-/// Exemple 1: If Else
+/// Exemple 3: If Else
 name = input();
 if (name == "tuas nega") {
 	print("Olá, criador!");
@@ -37,7 +37,7 @@ if (name == "tuas nega") {
 }
 
 ////////////////////
-/// Exemple 1: While
+/// Exemple 4: While
 x = 10;
 while (x > 0) {
 	print(x * x);
@@ -45,7 +45,7 @@ while (x > 0) {
 }
 
 ///////////////////
-/// Exemple 1: Loop
+/// Exemple 5: Loop
 
 qnt = num(input());
 print("A quantidade escolhida é " + str(qnt));
@@ -54,7 +54,7 @@ loop (i : qnt) {
 }
 
 ////////////////////////
-/// Exemple 1: Fibonacci
+/// Exemple 6: Fibonacci
 qnt = num(input());
 
 a = 1;

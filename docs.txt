@@ -1,4 +1,5 @@
 if (expr) {} else {} // Condicional if convencional.
+while (expr) {} // Loop while convencional.
 
 input() // Pegar input do usuário. Retorna uma String.
 print(valor) // Printa alguma coisa no console.
