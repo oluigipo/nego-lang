@@ -69,7 +69,6 @@ function parseBlock(tokens) {
         let parts = [];
         let stop = 0;
         for (let i = 0; i < tokens.length; i++) {
-            console.log(i, tokens, tokens.slice(i, tokens.length));
             if (OPERATIONS.some(a => a === tokens[i])) {
                 console.log("ENTER");
                 if (tokens[i] === OPERATIONS[STATEMENT.RETURN] || tokens[i] === OPERATIONS[STATEMENT.BREAK]
