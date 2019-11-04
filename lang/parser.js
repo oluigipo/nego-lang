@@ -69,14 +69,17 @@ function parseBlock(tokens) {
         let parts = [];
         let stop = 0;
         for (let i = 0; i < tokens.length; i++) {
+            console.log(i, tokens, tokens.slice(i, tokens.length));
             if (OPERATIONS.some(a => a === tokens[i])) {
+                console.log("ENTER");
                 if (tokens[i] === OPERATIONS[STATEMENT.RETURN] || tokens[i] === OPERATIONS[STATEMENT.BREAK]
                     || tokens[i] === OPERATIONS[STATEMENT.CONTINUE]) {
                     let end = tokens.indexOf(';', i);
-                    if (end === -1) throw "Expected ';' after 'return' statement.";
+                    if (end === -1) throw `Expected ';' after '${tokens[i]}' statement.`;
                     let oop = tokens.slice(i, end);
                     parts.push(parseStmt(oop));
                     stop = end + 1;
+                    i = stop + 1;
                     continue;
                 }
 
@@ -108,7 +111,7 @@ function parseBlock(tokens) {
                 let op = tokens.slice(i, j);
                 parts.push(parseStmt(op));
                 stop = j;
-                i = j;
+                i = j - 1;
             } else if (tokens[i] === ';') {
                 let op = tokens.slice(stop, i);
                 parts.push(parseExpr(op));

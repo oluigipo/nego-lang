@@ -1,5 +1,7 @@
 let variables = {};
 let $return;
+let $returned = false;
+let $enterfunc = [];
 let $break = false;
 let $continue = false;
 let $loop = false;
@@ -45,6 +47,11 @@ function interpretBlock(block) {
             interpretStmt(code);
         }
 
+        let p = $enterfunc[$enterfunc.length - 1];
+        if ($returned && enter <= p) {
+            if (p - 1 === enter) $returned = false;
+            break;
+        }
         if ($continue) break;
     }
 
@@ -62,7 +69,7 @@ function interpretStmt(stmt) {
     let save;
     switch (stmt.operation) {
         case STATEMENT.IF:
-            result = interpretExpr(stmt.condition);
+            if (stmt.condition.isExpr) result = interpretExpr(stmt.condition);
 
             if (result.type === TYPE.IDENT) result = getVar(result.value);
             if (result.type === TYPE.STRLIT) throw "Cannot use a string as a condition.";
@@ -77,6 +84,9 @@ function interpretStmt(stmt) {
             break;
         case STATEMENT.RETURN:
             $return = stmt.value.isExpr ? interpretExpr(stmt.value) : stmt.value.type === TYPE.IDENT ? getVar(stmt.value.value) : stmt.value;
+            $continue = true;
+            $returned = true;
+            $enterfunc.push(enter);
             break;
         case STATEMENT.WHILE:
             result = interpretExpr(stmt.condition);
@@ -269,7 +279,7 @@ function interpretExpr(expr) {
                 return final;
             } else {
                 let funct = funcs[func];
-                args = args.map(a => a.value);
+                args = args.map(a => a.type === TYPE.IDENT ? getVar(a.value).value : a.value);
 
                 return funct(...args);
             }

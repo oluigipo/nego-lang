@@ -57,7 +57,7 @@ const OPERATIONS = [
 const FUNCTIONS = ["input", "print", "num", "str", "len"];
 
 const rules = [
-    { name: "line_comment", re: /^\/\/.+$/ },
+    { name: "line_comment", re: /^\/\/.+/ },
     { name: "comment", re: /^\/\*[^(\*\/)]*\*\// },
     { name: "number_literal", re: /^[0-9]+(\.[0-9]+)?/ },
     { name: "string_literal", re: /^".+?"/ },
