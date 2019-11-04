@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Nego Lang Editor</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <script src="codemirror/codemirror.js"></script>
+    <link rel="stylesheet" href="codemirror/codemirror.css">
+    <link rel="stylesheet" href="codemirror/atom.css">
+    <script src="codemirror/simple.js"></script>
+    <script src="codemirror/nego.js"></script>
+    <script src="nego_lang.js"></script>
+    <style type="text/css">
+        body{
+            margin: 0px;
+            height: 100vh;
+            overflow: hidden;
+            background:#282c34;
+        }
+
+        button{
+            background-color: #222630;
+            display: inline-block;
+            color: white;
+            font-size: 14px;
+            font-family: "Roboto", sans-serif;
+            padding: 12px;
+            outline: none;
+            box-sizing: border-box;
+            border: 0px;
+            margin: 0px;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        button:hover{
+            background-color: #383c44;
+        }
+
+        #toolbar{
+            border-bottom: 2px solid #181c24;
+            background: #222630;
+        }
+
+        #console{
+            white-space: pre-wrap;
+            font-family: Consolas,monospace;
+            height: 200px;
+            border-top: 2px solid #181c24;
+            color: #dddddd;
+            overflow-y: scroll;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <script type="text/nego" id='valtext'></script>
+    <div id="ide" style="display: flex; flex-direction: column; height: 100%;">
+        <div id="toolbar">
+            <button onclick="compile()" style="height: 40px;">Run</button>
+            <button onclick="newfile()" style="height: 40px;">New</button>
+        </div>
+        <span id='editarea'></span>
+        <div id="console"></div>
+    </div>
+    <script type="text/javascript">
+        editor = CodeMirror(document.getElementById('editarea'),{
+            mode:  "nego",
+            lineNumbers: true,
+            value: document.getElementById('valtext').text,
+            theme: "one-dark",
+            indentUnit: 4,
+        });
+
+        if(localStorage["nego_code"]) editor.setValue(localStorage["nego_code"]);
+
+        funcs = {
+            input: function () { return { type: TYPE.STRLIT, value: prompt() }; },
+            print: function (s) { cons.innerHTML += `<span>${s}</span>\n`; return { type: TYPE.NUMLIT, value: 0 } },
+            num: function (s) { return { type: TYPE.NUMLIT, value: Number(s) }; },
+            str: function (n) { return { type: TYPE.STRLIT, value: String(n) }; },
+            len: function (arr) { return { type: TYPE.NUMLIT, value: arr.length }; }
+        };
+
+        function compile() {
+            variables = {};
+            $return = false;
+            $break = false;
+            $continue = false;
+            $loop = false;
+            enter = 0;
+            cons.innerHTML = "";
+            let sourceCode = editor.getValue();
+            localStorage["nego_code"] = sourceCode;
+            try{
+                let tokens = tokenize(sourceCode);
+                if (tokens === null) throw "Tokens is null";
+                console.log("|| TOKENS ||");
+                console.log(tokens);
+                let parseTree = parse(tokens);
+                console.log("|| PARSE TREE ||");
+                console.log(parseTree);
+                interpreter(parseTree);
+            }catch(e){
+                cons.innerHTML += `<span style="color: #e44;">${e}</span>\n`;
+                throw e;
+            }
+        }
+
+        function newfile() {
+            if(!confirm("Deseja criar um novo arquivo? O atual será perdido")) return;
+            editor.setValue("");
+            delete localStorage["nego_code"];
+        }
+
+        const cons = document.getElementById("console");
+    </script>
+</body>
+</html>
