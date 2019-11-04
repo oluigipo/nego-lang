@@ -66,6 +66,7 @@
         <div id="toolbar">
             <button onclick="compile()" style="height: 40px;">Run</button>
             <button onclick="newfile()" style="height: 40px;">New</button>
+            <button onclick="opendocs()" style="height: 40px;">Documentation</button>
         </div>
         <span id='editarea'></span>
         <div id="console"></div>
@@ -112,6 +113,10 @@
             if (!confirm("Deseja criar um novo arquivo? O atual será perdido")) return;
             editor.setValue("");
             delete localStorage["nego_code"];
+        }
+
+        function opendocs() {
+            window.open("docs/");
         }
 
         const cons = document.getElementById("console");
