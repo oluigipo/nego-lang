@@ -69,7 +69,7 @@ function interpretStmt(stmt) {
     let save;
     switch (stmt.operation) {
         case STATEMENT.IF:
-            if (stmt.condition.isExpr) result = interpretExpr(stmt.condition);
+            result = (stmt.condition.isExpr) ? interpretExpr(stmt.condition) : stmt.condition;
 
             if (result.type === TYPE.IDENT) result = getVar(result.value);
             if (result.type === TYPE.STRLIT) throw "Cannot use a string as a condition.";
@@ -299,7 +299,7 @@ function getVar(name) {
     while (copy[name] === undefined && copy.$parent !== undefined) copy = copy.$parent;
 
     if (copy[name] === undefined || copy[name] === null) {
-        throw `Variable '${name}' not set before reading.`;
+        throw `Variable '${name}' not set before reading it.`;
     }
 
     return copy[name];
