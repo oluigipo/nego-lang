@@ -1,12 +1,12 @@
+const NULL = { type: TYPE.NUMLIT, value: 0 };
 let variables = {};
-let $return;
+let $return = NULL;
 let $returned = false;
 let $enterfunc = [];
 let $break = false;
 let $continue = false;
 let $loop = false;
 let enter = 0;
-const NULL = 0;
 const constants = {
     $true: { type: TYPE.NUMLIT, value: 1 },
     $false: { type: TYPE.NUMLIT, value: 0 }
@@ -29,6 +29,7 @@ let tree;
  */
 function interpreter(parseTree) {
     tree = parseTree;
+    $return = NULL;
 
     console.log("|| OUTPUT ||");
     interpretBlock(tree.code);
@@ -60,8 +61,6 @@ function interpretBlock(block) {
             break;
         }
     }
-
-    if (p - 1 === enter && broke) $return = NULL;
 
     $continue = false;
     variables = variables.$parent;
@@ -287,7 +286,7 @@ function interpretExpr(expr) {
                 interpretBlock(funct.block);
 
                 let final = $return;
-                $return = 0;
+                $return = NULL;
                 return final;
             } else {
                 let funct = funcs[func];
