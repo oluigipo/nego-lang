@@ -185,6 +185,8 @@ function interpretExpr(expr) {
         case '<':
         case '>=':
         case '<=':
+        case '&&':
+        case '||':
             if (expr.left.isExpr) {
                 left = interpretExpr(expr.left);
             } else {
@@ -207,6 +209,8 @@ function interpretExpr(expr) {
                 case '<': result.value = left.value < right.value; break;
                 case '>=': result.value = left.value >= right.value; break;
                 case '<=': result.value = left.value <= right.value; break;
+                case '&&': result.value = left.value !== 0 && right.value !== 0; break;
+                case '||': result.value = left.value !== 0 || right.value !== 0; break;
                 default: throw "HOW????????? HOW DID YOU GOT THIS EXCEPTION???";
             }
             result.value = Number(result.value);
