@@ -111,7 +111,7 @@
 
         function newfile() {
             if (!confirm("Deseja criar um novo arquivo? O atual será perdido")) return;
-            editor.setValue("");
+            editor.setValue(`print("Hello, World!");`);
             delete localStorage["nego_code"];
         }
 
