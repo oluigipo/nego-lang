@@ -6,6 +6,7 @@ let $break = false;
 let $continue = false;
 let $loop = false;
 let enter = 0;
+const NULL = 0;
 const constants = {
     $true: { type: TYPE.NUMLIT, value: 1 },
     $false: { type: TYPE.NUMLIT, value: 0 }
@@ -38,6 +39,7 @@ function interpreter(parseTree) {
  */
 function interpretBlock(block) {
     enter++;
+    let broke = false;
     for (let i = 0; i < block.length; i++) {
         const code = block[i];
 
@@ -50,10 +52,16 @@ function interpretBlock(block) {
         let p = $enterfunc[$enterfunc.length - 1];
         if ($returned && enter <= p) {
             if (p - 1 === enter) $returned = false;
+            broke = true;
             break;
         }
-        if ($continue) break;
+        if ($continue) {
+            broke = true;
+            break;
+        }
     }
+
+    if (p - 1 === enter && broke) $return = NULL;
 
     $continue = false;
     variables = variables.$parent;

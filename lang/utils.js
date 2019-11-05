@@ -60,7 +60,7 @@ const rules = [
     { name: "line_comment", re: /^\/\/.+/ },
     { name: "comment", re: /^\/\*[^(\*\/)]*\*\// },
     { name: "number_literal", re: /^[0-9]+(\.[0-9]+)?/ },
-    { name: "string_literal", re: /^".+?"/ },
+    { name: "string_literal", re: /^".*?"/ },
     { name: "plus", re: /^\+/ },
     { name: "minus", re: /^-/ },
     { name: "div", re: /^\// },

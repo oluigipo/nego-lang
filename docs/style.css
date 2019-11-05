@@ -17,6 +17,8 @@ body {
     font-family: Whitney,Helvetica Neue,Helvetica,Arial,sans-serif;
     font-weight: 300;
     float: left;
+    position: sticky;
+    top: 0;
 }
 
 .leftbar-item {
