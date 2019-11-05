@@ -1,0 +1,57 @@
+body {
+    background-color: #282c34;
+}
+
+#titlebar {
+    font-size: 22;
+    color: whitesmoke;
+    font-family: "Roboto", sans-serif;
+    cursor: default;
+}
+
+.leftbar {
+    height: 100vh;
+    width: 25%;
+    overflow: auto;
+    background-color: #181c24;
+    color: rgb(220,220,220);
+    font-family: Whitney,Helvetica Neue,Helvetica,Arial,sans-serif;
+    font-weight: 300;
+    float: left;
+}
+
+.leftbar-item {
+    margin-left: 15%;
+    margin-top: 3%;
+    font-size: 10pt;
+    cursor: pointer;
+}
+
+.leftbar-title {
+    margin-left: 5%;
+    margin-top: 5%;
+    font-weight: 600;
+}
+
+#content {
+    margin-left: 27%;
+    font-family: Whitney,Helvetica Neue,Helvetica,Arial,sans-serif;
+    color: rgb(220,220,220);
+    font-size: 10pt;
+    transition: opacity .25s;
+}
+
+#content.hide { opacity: 0; }
+#content.show { opacity: 1; }
+
+.code {
+    background-color: #1e222c;
+    font-size: 10pt;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.coderaw {
+    margin-left: 10px;
+    margin-right: 10px;
+}

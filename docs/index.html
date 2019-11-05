@@ -2,11 +2,36 @@
 <html>
 
 <head>
-    <title>Nega Documentation</title>
+    <link rel="stylesheet" href="style.css">
+    <title>Nego Documentation</title>
+    <link rel="shortcut icon" type="image/png" href="../favicon.ico">
 </head>
 
 <body>
-
+    <header>
+        <h2 id="titlebar">
+            Nego Documentation
+        </h2>
+    </header>
+    <div class="leftbar">
+        <div class="leftbar-title">Home</div>
+        <div onclick="showContent('home_overview')" class="leftbar-item">Overview</div>
+        <div onclick="showContent('home_variables')" class="leftbar-item">Variables</div>
+        <div onclick="showContent('home_ifelse')" class="leftbar-item">Conditionals</div>
+        <div onclick="showContent('home_loops')" class="leftbar-item">Loops</div>
+        <div class="leftbar-title">Examples</div>
+        <div onclick="showContent('example_helloworld')" class="leftbar-item">Hello World</div>
+        <div onclick="showContent('example_fibonacci_r')" class="leftbar-item">Fibonacci (Recursive)</div>
+        <div class="leftbar-title">Built-in Functions</div>
+        <div onclick="showContent('func_print')" class="leftbar-item">print()</div>
+        <div onclick="showContent('func_input')" class="leftbar-item">input()</div>
+        <div onclick="showContent('func_num')" class="leftbar-item">num()</div>
+        <div onclick="showContent('func_str')" class="leftbar-item">str()</div>
+    </div>
+    <div id="content">
+        content
+    </div>
+    <script src="script.js"></script>
 </body>
 
 </html>
