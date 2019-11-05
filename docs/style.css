@@ -10,7 +10,7 @@ body {
 }
 
 .leftbar {
-    width: 25%;
+    width: 225px;
     overflow: auto;
     background-color: #181c24;
     color: rgb(220,220,220);
@@ -33,7 +33,7 @@ body {
 }
 
 #content {
-    margin-left: 27%;
+    margin-left: 240px;
     font-family: Whitney,Helvetica Neue,Helvetica,Arial,sans-serif;
     color: rgb(220,220,220);
     font-size: 10pt;
