@@ -10,7 +10,6 @@ body {
 }
 
 .leftbar {
-    height: 100vh;
     width: 25%;
     overflow: auto;
     background-color: #181c24;
