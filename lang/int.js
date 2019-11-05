@@ -100,7 +100,7 @@ function interpretStmt(stmt) {
                 variables = { $parent: save };
 
                 interpretBlock(stmt.block);
-                result = interpretExpr(stmt.condition);
+                result = (stmt.condition.isExpr) ? interpretExpr(stmt.condition) : stmt.condition;
                 if (result.type === TYPE.IDENT) result = getVar(result.value);
                 if (result.type === TYPE.STRLIT) throw "Cannot use a string as a condition.";
             }
