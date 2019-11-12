@@ -3,15 +3,18 @@ let variables = {};
 let $return = NULL;
 let $returned = false;
 let $enterfunc = [];
+let $enterloop = [];
 let $break = false;
 let $continue = false;
 let $loop = false;
 let enter = 0;
-const constants = {
+let constants = {};
+const nativeConstants = {
     $true: { type: TYPE.NUMLIT, value: 1 },
     $false: { type: TYPE.NUMLIT, value: 0 }
 };
-const funcs = {
+let funcs;
+const nativeFuncs = {
     input: function () { return { type: TYPE.STRLIT, value: prompt() }; },
     print: function (s) { console.log(s); return { type: TYPE.NUMLIT, value: 0 } },
     num: function (s) { return { type: TYPE.NUMLIT, value: Number(s) }; },
@@ -31,6 +34,9 @@ function interpreter(parseTree) {
     tree = parseTree;
     $return = NULL;
 
+    funcs = { ...nativeFuncs };
+    constants = { ...nativeConstants };
+
     console.log("|| OUTPUT ||");
     interpretBlock(tree.code);
 }
@@ -40,8 +46,13 @@ function interpreter(parseTree) {
  */
 function interpretBlock(block) {
     enter++;
-    let broke = false;
     for (let i = 0; i < block.length; i++) {
+        let b = $enterloop[$enterloop.length - 1];
+        if ($continue && enter >= b) {
+            if (b + 1 === enter) $continue = false;
+            break;
+        }
+
         const code = block[i];
 
         if (code.isExpr) {
@@ -53,16 +64,10 @@ function interpretBlock(block) {
         let p = $enterfunc[$enterfunc.length - 1];
         if ($returned && enter <= p) {
             if (p - 1 === enter) $returned = false;
-            broke = true;
-            break;
-        }
-        if ($continue) {
-            broke = true;
             break;
         }
     }
 
-    $continue = false;
     variables = variables.$parent;
     enter--;
 }
@@ -102,6 +107,7 @@ function interpretStmt(stmt) {
             if (result.type === TYPE.STRLIT) throw "Cannot use a string as a condition.";
 
             $loop = true;
+            $enterloop.push(enter);
             while (result.value !== 0 && !$break) {
                 save = variables;
                 variables = { $parent: save };
@@ -114,11 +120,13 @@ function interpretStmt(stmt) {
 
             $loop = false;
             $break = false;
+            $enterloop.pop();
 
             break;
         case STATEMENT.LOOP:
             if (stmt.it === null) {
                 $loop = true;
+                $enterloop.push(enter);
                 while (!$break) {
                     save = variables;
                     variables = { $parent: save };
@@ -126,6 +134,7 @@ function interpretStmt(stmt) {
                 }
                 $break = false;
                 $loop = false;
+                $enterloop.pop();
                 break;
             }
 
@@ -138,6 +147,7 @@ function interpretStmt(stmt) {
             }
             if (times.type === TYPE.STRLIT) throw "Cannor loop iterating a string.";
             $loop = true;
+            $enterloop.push(enter);
 
             for (let i = 0; i < times.value && !$break; i++) {
                 save = variables;
@@ -148,6 +158,7 @@ function interpretStmt(stmt) {
 
             $break = false;
             $loop = false;
+            $enterloop.pop();
 
             break;
         case STATEMENT.BREAK:
@@ -158,6 +169,16 @@ function interpretStmt(stmt) {
         case STATEMENT.CONTINUE:
             if (!$loop) throw "Continue statement outside a loop.";
             $continue = true;
+            break;
+        case STATEMENT.INCLUDE:
+            if (!Object.keys(LIBRARIES).includes(stmt.name)) throw `The library ${stmt.name} doesn't exists.`;
+            let lib = LIBRARIES[stmt.name];
+            Object.keys(lib.functions).forEach(name => {
+                funcs[name] = lib.functions[name];
+            });
+            Object.keys(lib.constants).forEach(name => {
+                constants['$' + name] = lib.constants[name];
+            });
             break;
     }
 }
@@ -271,7 +292,7 @@ function interpretExpr(expr) {
                 });
             }
 
-            let func = FUNCTIONS.find(a => a === expr.left.value);
+            let func = Object.keys(funcs).find(a => a === expr.left.value);
             if (func === undefined) {
                 let funct = tree.functions.find(f => f.name === expr.left.value);
                 if (funct === undefined) throw `${expr.left.value} isn't a function.`;

@@ -72,7 +72,7 @@ function parseBlock(tokens) {
             if (OPERATIONS.some(a => a === tokens[i])) {
                 console.log("ENTER");
                 if (tokens[i] === OPERATIONS[STATEMENT.RETURN] || tokens[i] === OPERATIONS[STATEMENT.BREAK]
-                    || tokens[i] === OPERATIONS[STATEMENT.CONTINUE]) {
+                    || tokens[i] === OPERATIONS[STATEMENT.CONTINUE] || tokens[i] === OPERATIONS[STATEMENT.INCLUDE]) {
                     let end = tokens.indexOf(';', i);
                     if (end === -1) throw `Expected ';' after '${tokens[i]}' statement.`;
                     let oop = tokens.slice(i, end);
@@ -456,8 +456,16 @@ function parseStmt(tokens) {
             break;
         case OPERATIONS[STATEMENT.BREAK]:
         case OPERATIONS[STATEMENT.CONTINUE]:
+            stmt.operation = tokens[0] === OPERATIONS[STATEMENT.BREAK] ? STATEMENT.BREAK : STATEMENT.CONTINUE;
             if (tokens.length > 1) throw `Unexpected ${tokens[1]} after '${tokens[0]}' statement.`;
-            stmt.operation = tokens[0];
+            return stmt;
+            break;
+        case OPERATIONS[STATEMENT.INCLUDE]:
+            if (tokens.length < 2) throw `Expected a string after ${tokens[0]} statement.`;
+            if (tokens.length > 2) throw `Unexpected '${tokens[2]}' after '${tokens[1]}' in ${tokens[0]} statement.`;
+            if (testRule(tokens[1]) !== TYPE.STRLIT) throw `Includes name should be a string.`;
+            stmt.operation = STATEMENT.INCLUDE;
+            stmt.name = tokens[1].slice(1, tokens[1].length - 1);
             return stmt;
             break;
     }

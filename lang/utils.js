@@ -49,12 +49,12 @@ const OPERATOR = [
     '==', '=', '+', '-', '(', ')', '*', '/', '>', '<', '>=', '<=', '!=', '&&', '||', ':'
 ];
 const STATEMENT = {
-    IF: 0, LOOP: 1, RETURN: 2, ELSE: 3, WHILE: 4, FUNC: 5, BREAK: 6, CONTINUE: 7
+    IF: 0, LOOP: 1, RETURN: 2, ELSE: 3, WHILE: 4, FUNC: 5, BREAK: 6, CONTINUE: 7, INCLUDE: 8
 };
 const OPERATIONS = [
-    "if", "loop", "return", "else", "while", "func", "break", "continue"
+    "if", "loop", "return", "else", "while", "func", "break", "continue", "include"
 ];
-const FUNCTIONS = ["input", "print", "num", "str", "len"];
+let FUNCTIONS = ["input", "print", "num", "str", "len"];
 
 const rules = [
     { name: "line_comment", re: /^\/\/.+/ },
@@ -87,6 +87,7 @@ const rules = [
     { name: "double_colon", re: /^:/ },
     { name: "semi-colon", re: /^;/ },
     { name: "colon", re: /^,/ },
+    { name: "include", re: /^include\b/ },
     { name: "function", re: /^func\b/ },
     { name: "return", re: /^return\b/ },
     { name: "loop", re: /^loop\b/ },

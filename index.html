@@ -5,7 +5,8 @@
     <title>Nego Lang Editor</title>
     <meta name="viewport" content="width=device-width, user-scalable=no">
     <script src="codemirror/codemirror.js"></script>
-    <link rel="shortcut icon" type="image/png" href="https://raw.githubusercontent.com/Luig1B/nego-lang/master/favicon.ico">
+    <link rel="shortcut icon" type="image/png"
+        href="https://raw.githubusercontent.com/Luig1B/nego-lang/master/favicon.ico">
     <link rel="stylesheet" href="codemirror/codemirror.css">
     <link rel="stylesheet" href="codemirror/atom.css">
     <script src="codemirror/simple.js"></script>
@@ -14,6 +15,7 @@
     <script src="lang/tokenizer.js"></script>
     <script src="lang/parser.js"></script>
     <script src="lang/int.js"></script>
+    <script src="lang/libs.js"></script>
     <style type="text/css">
         body {
             margin: 0px;
@@ -82,7 +84,7 @@
 
         if (localStorage["nego_code"]) editor.setValue(localStorage["nego_code"]);
 
-        funcs.print = function (s) { cons.innerHTML += `<span>${s}</span>\n`; return { type: TYPE.NUMLIT, value: 0 } };
+        nativeFuncs.print = function (s) { cons.innerHTML += `<span>${s}</span>\n`; return { type: TYPE.NUMLIT, value: 0 } };
 
         function compile() {
             variables = {};

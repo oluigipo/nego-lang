@@ -25,6 +25,9 @@ STMT:
     isExpr: BOOLEAN
     operation: STATMENT
 
+INCLUDE extends STMT:
+    name: STRING
+
 IF extends STMT:
     block1: BLOCK
     block2: BLOCK
