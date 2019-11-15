@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="codemirror/atom.css">
     <script src="codemirror/simple.js"></script>
     <script src="codemirror/nego.js"></script>
+    <script src="codemirror/matchbrackets.js"></script>
     <script src="lang/utils.js"></script>
     <script src="lang/tokenizer.js"></script>
     <script src="lang/parser.js"></script>
@@ -80,11 +81,44 @@
             value: document.getElementById('valtext').text,
             theme: "one-dark",
             indentUnit: 4,
+            matchBrackets: true
         });
 
         if (localStorage["nego_code"]) editor.setValue(localStorage["nego_code"]);
 
         nativeFuncs.print = function (s) { cons.innerHTML += `<span>${s}</span>\n`; return { type: TYPE.NUMLIT, value: 0 } };
+
+        editor.on("change",(e)=>{
+            variables = {};
+            $return = false;
+            $break = false;
+            $continue = false;
+            $loop = false;
+            enter = 0;
+            cons.innerHTML = "";
+            let sourceCode = editor.getValue();
+            localStorage["nego_code"] = sourceCode;
+            try {
+                let tokens = tokenize(sourceCode);
+                if (tokens === null) throw "Tokens is null";
+                let parseTree = parse(tokens);
+                highUserFuncs(parseTree.functions.map(f=>f.name));
+            } catch (e) {}
+        })
+
+        let allMarks = [];
+        function highUserFuncs(fnames){
+            for(mk of allMarks) mk.clear();
+            //let fnames = parseTree.functions.map(f=>f.name)
+            for (var i = 0; i < editor.lastLine()+1; i++) {
+                for(tok of editor.getLineTokens(i)){
+                    //console.log(tok)
+                    if(tok.type==="uvar" && fnames.includes(tok.string)){
+                        allMarks.push(editor.markText({line:i,ch:tok.start},{line:i,ch:tok.end},{className:"cm-variable"}));
+                    }
+                }
+            }
+        }
 
         function compile() {
             variables = {};
@@ -121,7 +155,9 @@
             window.open("docs/");
         }
 
+
         const cons = document.getElementById("console");
+        CodeMirror.signal(editor, "change");
     </script>
 </body>
 
