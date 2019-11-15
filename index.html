@@ -12,6 +12,7 @@
     <script src="codemirror/simple.js"></script>
     <script src="codemirror/nego.js"></script>
     <script src="codemirror/matchbrackets.js"></script>
+    <script src="codemirror/closebrackets.js"></script>
     <script src="lang/utils.js"></script>
     <script src="lang/tokenizer.js"></script>
     <script src="lang/parser.js"></script>
@@ -81,7 +82,8 @@
             value: document.getElementById('valtext').text,
             theme: "one-dark",
             indentUnit: 4,
-            matchBrackets: true
+            matchBrackets: true,
+            autoCloseBrackets: true
         });
 
         if (localStorage["nego_code"]) editor.setValue(localStorage["nego_code"]);
