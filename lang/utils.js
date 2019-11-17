@@ -53,7 +53,7 @@ const STATEMENT = {
 };
 const OPERATIONS = [
     "if", "loop", "return", "else", "while", "func", "break", "continue", "include"
-];
+]; // po
 let FUNCTIONS = ["input", "print", "num", "str", "len"];
 
 const rules = [

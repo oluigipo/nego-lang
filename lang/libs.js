@@ -27,6 +27,10 @@ const LIBRARIES = {
             abs: (arg0) => {
                 if (typeof arg0 !== "number") throw `1st argument of 'abs()' should be a number.`;
                 return { type: TYPE.NUMLIT, value: Math.abs(arg0) };
+            },
+            sqrt: (arg0) => {
+                if (typeof arg0 !== "number") throw `1st argument of 'sqrt()' should be a number.`;
+                return { type: TYPE.NUMLIT, value: Math.sqrt(arg0) };
             }
         },
     }

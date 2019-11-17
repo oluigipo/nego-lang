@@ -6,7 +6,7 @@ function parse(tokens) {
     tokens = ['{', ...tokens, '}'];
     let parseTree = { functions: [], code: [] };
     let funcsIndexes = indexesOf(tokens, OPERATIONS[STATEMENT.FUNC]);
-    funcsIndexes.reverse();
+    funcsIndexes.reverse(); // po
 
     for (let i = 0; i < funcsIndexes.length; i++) {
         let k = tokens.indexOf('{', funcsIndexes[i]);

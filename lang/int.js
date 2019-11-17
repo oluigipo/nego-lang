@@ -46,7 +46,7 @@ function interpreter(parseTree) {
  */
 function interpretBlock(block) {
     enter++;
-
+    //po
     for (let i = 0; i < block.length; i++) {
         let b = $enterloop[$enterloop.length - 1];
         if ($continue && enter >= b) {
