@@ -5,7 +5,7 @@ CodeMirror.defineSimpleMode("nego", {
 
     { regex: /"(?:[^\\]|\\.)*?"/, token: "string" },
 
-    { regex: /(func)(\s+)([a-zA-Z_][\w]*)/i, token: ["keyword",null,"variable"] },
+    { regex: /(func)(\s+)([a-zA-Z_][\w]*)/i, token: ["keyword", null, "variable"] },
 
     { regex: /\b(loop|while|if|else|return|break|continue|include)\b/i, token: "keyword" },
 
@@ -21,7 +21,7 @@ CodeMirror.defineSimpleMode("nego", {
     { regex: /\{/, indent: true },
     { regex: /\}/, dedent: true },
 
-    {regex: /[a-zA-Z_][\w]*/, token: "uvar"},
+    { regex: /[a-zA-Z_][\w]*/, token: "uvar" },
   ],
   comment: [
     { regex: /.*?\*\//, token: "comment", next: "start" },
