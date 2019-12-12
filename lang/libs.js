@@ -1,3 +1,10 @@
+let lists = [];
+const Null = { type: TYPE.NUMLIT, value: 0 };
+
+function Returning(v) {
+    return { type: typeof v === "string" ? TYPE.STRLIT : TYPE.NUMLIT, value: v };
+}
+
 const LIBRARIES = {
     math: {
         constants: {
@@ -33,5 +40,48 @@ const LIBRARIES = {
                 return { type: TYPE.NUMLIT, value: Math.sqrt(arg0) };
             }
         },
+    },
+    lists: {
+        constants: {},
+        functions: {
+            list_create() {
+                return { type: TYPE.NUMLIT, value: lists.push([]) - 1 };
+            },
+
+            list_push(list, value) {
+                if (lists.length <= list) throw "Trying to access a list that doesn't exists.";
+                lists[list].push(value);
+                return Null;
+            },
+
+            list_pop(list) {
+                if (lists.length <= list) throw "Trying to access a list that doesn't exists.";
+                const v = lists[list][list.length - 1];
+                lists[list].pop();
+                return Returning(v);
+            },
+
+            list_get(list, index) {
+                if (lists.length <= list) throw "Trying to access a list that doesn't exists.";
+                return Returning(lists[list][index]);
+            },
+
+            list_remove(list, index) {
+                if (lists.length <= list) throw "Trying to access a list that doesn't exists.";
+                lists[list] = lists[list].filter((v, i) => i !== index);
+                return Null;
+            },
+
+            list_size(list) {
+                if (lists.length <= list) throw "Trying to access a list that doesn't exists.";
+                return Returning(lists[list].length);
+            },
+
+            list_set(list, index, value) {
+                if (lists.length <= list) throw "Trying to access a list that doesn't exists.";
+                lists[list][index] = value;
+                return Null;
+            }
+        }
     }
 };
